@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from collections import Counter
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, accuracy_score
-
+import time
 
 def dist_euclidiana(x1, x2):
     return np.sqrt(np.sum((x1 - x2) ** 2))
@@ -79,3 +79,11 @@ for k in ks:
     disp.plot(cmap=plt.cm.RdPu) 
     plt.title(f"Matriz de confusão - k={k}")
     plt.show()
+        
+    start = time.time()
+    knn = KNN(k=3)
+    knn.fit(X_train, y_train)
+    y_pred = knn.predict(X_test)
+    end = time.time()
+    print(f"Tempo KNN manual: {end - start:.4f}s")
+

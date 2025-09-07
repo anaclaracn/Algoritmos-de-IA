@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import time
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, precision_score, recall_score, accuracy_score
@@ -37,4 +38,12 @@ for k in ks:
     disp.plot(cmap=plt.cm.RdPu)
     plt.title(f"Matriz de Confusão (Sklearn KNN) - k={k}")
     plt.show()
+
+    start = time.time()
+    knn_sk = KNeighborsClassifier(n_neighbors=3)
+    knn_sk.fit(X_train, y_train)
+    y_pred_sk = knn_sk.predict(X_test)
+    end = time.time()
+    print(f"Tempo Sklearn KNN: {end - start:.4f}s")
+
 
