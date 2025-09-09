@@ -56,15 +56,17 @@ data = load_iris()
 X, y = data.data, data.target
 
 # dividir treino e teste
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
 
 ks = [1, 3, 5, 7]
 
 for k in ks:
     print(f"\nResultados para k={k} para o Conjunto de dados flor Iris")
+    start = time.time()
     knn = KNN(k)
     knn.fit(X_train, y_train)
     y_pred = knn.predict(X_test)  # classes previstas das flores
+    end = time.time()
 
     acc = accuracy_score(y_test, y_pred)
     prec = precision_score(y_test, y_pred, average='macro')
@@ -73,6 +75,7 @@ for k in ks:
     print(f"Acurácia: {acc:.4f}")
     print(f"Precisão: {prec:.4f}")
     print(f"Revocação: {rec:.4f}")
+    print(f"Tempo KNN manual: {end - start:.4f}s")
 
     cm = confusion_matrix(y_test, y_pred)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=data.target_names)
@@ -80,10 +83,5 @@ for k in ks:
     plt.title(f"Matriz de confusão - k={k}")
     plt.show()
         
-    start = time.time()
-    knn = KNN(k=3)
-    knn.fit(X_train, y_train)
-    y_pred = knn.predict(X_test)
-    end = time.time()
-    print(f"Tempo KNN manual: {end - start:.4f}s")
+
 
