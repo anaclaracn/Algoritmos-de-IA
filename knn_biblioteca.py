@@ -17,7 +17,6 @@ ks = [1, 3, 5, 7]
 for k in ks:
     print(f"\nResultados com sklearn KNN para k={k}")
     
-    # medir tempo de execução do treino + predição
     start = time.time()
     knn = KNeighborsClassifier(n_neighbors=k)
     knn.fit(X_train, y_train)
