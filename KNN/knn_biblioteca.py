@@ -27,9 +27,9 @@ for k in ks:
     prec = precision_score(y_test, y_pred, average='macro')
     rec = recall_score(y_test, y_pred, average='macro')
     
-    print(f"Acurácia: {acc:.4f}")
-    print(f"Precisão: {prec:.4f}")
-    print(f"Revocação: {rec:.4f}")
+    print(f"Acuracia: {acc:.4f}")
+    print(f"Precisa: {prec:.4f}")
+    print(f"Revocacao: {rec:.4f}")
     print(f"Tempo Sklearn KNN: {end - start:.4f}s")
     
     cm = confusion_matrix(y_test, y_pred)
