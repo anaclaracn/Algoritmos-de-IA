@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
 from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score, adjusted_rand_score, normalized_mutual_info_score
+from sklearn.preprocessing import StandardScaler
 import os
 import time
 import tracemalloc 
@@ -104,7 +105,6 @@ def main():
     X = iris.data
     y_true = iris.target
 
-    from sklearn.preprocessing import StandardScaler
     Xs = StandardScaler().fit_transform(X)
 
     resultados = []
