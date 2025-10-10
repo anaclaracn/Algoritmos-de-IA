@@ -9,7 +9,7 @@ import os
 import time
 import tracemalloc
 
-class KMeansBruto:
+class KMeans:
     def __init__(self, n_clusters=3, max_iter=300, tol=1e-4, random_state=None, verbose=False):
         self.n_clusters = n_clusters
         self.max_iter = max_iter
@@ -67,7 +67,7 @@ def rodar_fluxo(k, X, y_true=None, seed=42, save_dir="resultados", verbose=False
     melhor_inercia = np.inf
 
     for init in range(10):  # várias inicializações
-        modelo = KMeansBruto(n_clusters=k, random_state=seed + init, verbose=verbose)
+        modelo = KMeans(n_clusters=k, random_state=seed + init, verbose=verbose)
         modelo.fit(X)
         inertia = modelo.inertia(X)
         if inertia < melhor_inercia:
@@ -91,7 +91,7 @@ def rodar_fluxo(k, X, y_true=None, seed=42, save_dir="resultados", verbose=False
     plt.scatter(centroids2[:, 0], centroids2[:, 1], marker='X', s=120, c='black', label='Centroids')
     plt.title(f'K-means Bruto (k={k}) - Silhouette: {sil:.4f}')
     plt.legend()
-    filename = os.path.join(save_dir, f'kmeansBruto_k{k}_seed{used_seed}.png')
+    filename = os.path.join(save_dir, f'kmeans_k{k}_seed{used_seed}.png')
     plt.savefig(filename, dpi=150, bbox_inches='tight')
     plt.close()
 
