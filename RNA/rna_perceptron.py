@@ -10,7 +10,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score, classification_rep
 
 
 def rede_neural_perceptron(dataset_name, X, y, hidden_layers=(10, 10), max_iter=1000, random_state=42):
-    print(f"\n=== Treinando Rede Neural para o dataset: {dataset_name} ===")
+    print(f"\n----- Treinando Rede Neural para o dataset: {dataset_name} -----")
 
     # Normaliza os dados -> essencial para redes neurais
     scaler = StandardScaler()
@@ -63,8 +63,8 @@ result_iris = rede_neural_perceptron("Iris", iris.data, iris.target, hidden_laye
 
 # WINE
 wine = load_wine()
-result_wine = rede_neural_perceptron("Wine", wine.data, wine.target, hidden_layers=(12, 8))
+result_wine = rede_neural_perceptron("Wine", wine.data, wine.target, hidden_layers=(12, 8, 4))
 
-print("\n=== RESUMO GERAL ===")
+print("\nConclusão: ")
 resumo = pd.DataFrame([result_iris, result_wine])[["dataset", "accuracy", "precision", "recall"]]
 print(resumo)
