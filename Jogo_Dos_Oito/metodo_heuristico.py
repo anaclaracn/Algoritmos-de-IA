@@ -1,6 +1,7 @@
 import heapq
 import copy
 import time
+from itertools import count
 
 # Estado objetivo
 goal_state = [[1, 2, 3],
@@ -38,8 +39,8 @@ def get_neighbors(state):
 
 # ---------------- Heurísticas ----------------
 
-# h1 = número de peças fora do lugar
 def h_misplaced(state):
+    """Número de peças fora do lugar"""
     count = 0
     for i in range(3):
         for j in range(3):
@@ -47,8 +48,8 @@ def h_misplaced(state):
                 count += 1
     return count
 
-# h2 = distância de Manhattan
 def h_manhattan(state):
+    """Soma das distâncias de Manhattan"""
     distance = 0
     for i in range(3):
         for j in range(3):
@@ -62,15 +63,18 @@ def h_manhattan(state):
 
 def a_star(start_state, heuristic='manhattan'):
     open_list = []
-    heapq.heappush(open_list, (0, start_state, []))
+    counter = count()  # contador incremental para desempate
+    heapq.heappush(open_list, (0, next(counter), start_state, []))
     visited = set()
     visited.add(state_to_tuple(start_state))
+    nodes_expanded = 0
 
     while open_list:
-        cost, current_state, path = heapq.heappop(open_list)
+        cost, _, current_state, path = heapq.heappop(open_list)
+        nodes_expanded += 1
 
         if current_state == goal_state:
-            return path + [current_state]
+            return path + [current_state], nodes_expanded
 
         g = len(path)
 
@@ -86,8 +90,9 @@ def a_star(start_state, heuristic='manhattan'):
                     h = h_misplaced(neighbor)
 
                 f = g + 1 + h
-                heapq.heappush(open_list, (f, neighbor, path + [current_state]))
-    return None
+                heapq.heappush(open_list, (f, next(counter), neighbor, path + [current_state]))
+
+    return None, nodes_expanded
 
 # ---------------- Movimentação manual ----------------
 
@@ -110,9 +115,9 @@ def move(state, direction):
 # ---------------- Interface ----------------
 
 def main():
-    start_state = [[2, 8, 3],
-                   [1, 6, 4],
-                   [7, 0, 5]]
+    start_state = [[2, 8, 1],
+                  [0, 4, 3],
+                  [7, 6, 5]]
 
     print("===== JOGO DOS OITO =====")
     print("Escolha o modo:")
@@ -145,20 +150,14 @@ def main():
 
     # --- MODO 2: A* automático ---
     elif choice == '2':
-        print("\nEscolha a heurística:")
-        print("1 - Peças fora do lugar (h1)")
-        print("2 - Distância de Manhattan (h2)")
-        h_choice = input("Digite sua escolha (1/2): ")
-        heuristic = 'misplaced' if h_choice == '1' else 'manhattan'
-
-        print(f"\nResolvendo automaticamente com A* ({heuristic})...\n")
         start_time = time.time()
-        path = a_star(start_state, heuristic=heuristic)
+        path, nodes_expanded = a_star(start_state)
         end_time = time.time()
 
         if path:
             print(f"Solução encontrada em {len(path)-1} movimentos.")
-            print(f"Tempo de execução: {end_time - start_time:.4f} segundos\n")
+            print(f"Tempo de execução: {end_time - start_time:.4f} segundos")
+            print(f"Nós expandidos: {nodes_expanded}\n")
             for i, state in enumerate(path):
                 print(f"Passo {i}:")
                 print_board(state)

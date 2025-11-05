@@ -41,19 +41,21 @@ def bfs(start_state):
     queue = deque([(start_state, [])])  # (estado, caminho)
     visited = set()
     visited.add(state_to_tuple(start_state))
+    expanded_nodes = 0  # contador de nós expandidos
 
     while queue:
         current_state, path = queue.popleft()
+        expanded_nodes += 1  # incrementa a cada nó retirado da fila
 
         if is_goal(current_state):
-            return path + [current_state]
+            return path + [current_state], expanded_nodes
 
         for neighbor in get_neighbors(current_state):
             t = state_to_tuple(neighbor)
             if t not in visited:
                 visited.add(t)
                 queue.append((neighbor, path + [current_state]))
-    return None
+    return None, expanded_nodes
 
 # Função para exibir o tabuleiro
 def print_board(state):
@@ -80,9 +82,9 @@ def move(state, direction):
 
 # ---------------- INTERFACE ----------------
 def main():
-    start_state = [[2, 8, 3],
-                   [1, 6, 4],
-                   [7, 0, 5]]
+    start_state = [[2, 8, 1],
+                  [0, 4, 3],
+                  [7, 6, 5]]
 
     print("===== JOGO DOS OITO =====")
     print("Escolha o modo:")
@@ -103,7 +105,7 @@ def main():
             print_board(current_state)
 
             if is_goal(current_state):
-                print("Parabéns! Você chegou ao objetivo!")
+                print("🎉 Parabéns! Você chegou ao objetivo!")
                 break
 
             move_input = input("Seu movimento (W/A/S/D ou Q para sair): ").lower()
@@ -117,12 +119,13 @@ def main():
     elif choice == '2':
         print("\nResolvendo automaticamente com Busca em Largura (BFS)...")
         start_time = time.time()
-        path = bfs(start_state)
+        path, expanded_nodes = bfs(start_state)
         end_time = time.time()
 
         if path:
             print(f"\nSolução encontrada em {len(path)-1} movimentos.")
-            print(f"Tempo de execução: {end_time - start_time:.4f} segundos\n")
+            print(f"Tempo de execução: {end_time - start_time:.4f} segundos")
+            print(f"Nós expandidos: {expanded_nodes}\n")
             for i, state in enumerate(path):
                 print(f"Passo {i}:")
                 print_board(state)
