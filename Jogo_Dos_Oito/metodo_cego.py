@@ -3,9 +3,9 @@ import copy
 import time
 
 # Estado objetivo
-goal_state = [[1, 2, 3],
-              [8, 0, 4],
-              [7, 6, 5]]
+estado_objetivo = [[1, 2, 3],
+                   [8, 0, 4],
+                   [7, 6, 5]]
 
 # Função para encontrar a posição do zero (vazio)
 def find_zero(state):
@@ -34,13 +34,13 @@ def state_to_tuple(state):
 
 # Verifica se o estado é o objetivo
 def is_goal(state):
-    return state == goal_state
+    return state == estado_objetivo
 
 # Busca em largura (BFS)
-def bfs(start_state):
-    queue = deque([(start_state, [])])  # (estado, caminho)
+def bfs(estado_inicial):
+    queue = deque([(estado_inicial, [])])  # (estado, caminho)
     visited = set()
-    visited.add(state_to_tuple(start_state))
+    visited.add(state_to_tuple(estado_inicial))
     expanded_nodes = 0  # contador de nós expandidos
 
     while queue:
@@ -82,9 +82,9 @@ def move(state, direction):
 
 # ---------------- INTERFACE ----------------
 def main():
-    start_state = [[2, 8, 1],
-                  [0, 4, 3],
-                  [7, 6, 5]]
+    estado_inicial = [[2, 8, 1],
+                      [0, 4, 3],
+                      [7, 6, 5]]
 
     print("===== JOGO DOS OITO =====")
     print("Escolha o modo:")
@@ -95,17 +95,17 @@ def main():
 
     # --- MODO 1: Jogador manual ---
     if choice == '1':
-        current_state = copy.deepcopy(start_state)
+        current_state = copy.deepcopy(estado_inicial)
         print("\nUse as teclas W (cima), S (baixo), A (esquerda), D (direita)")
         print("Objetivo:")
-        print_board(goal_state)
+        print_board(estado_objetivo)
 
         while True:
             print("Estado atual:")
             print_board(current_state)
 
             if is_goal(current_state):
-                print("🎉 Parabéns! Você chegou ao objetivo!")
+                print("Parabéns! Você chegou ao objetivo!")
                 break
 
             move_input = input("Seu movimento (W/A/S/D ou Q para sair): ").lower()
@@ -119,13 +119,13 @@ def main():
     elif choice == '2':
         print("\nResolvendo automaticamente com Busca em Largura (BFS)...")
         start_time = time.time()
-        path, expanded_nodes = bfs(start_state)
+        path, expanded_nodes = bfs(estado_inicial)
         end_time = time.time()
 
         if path:
             print(f"\nSolução encontrada em {len(path)-1} movimentos.")
             print(f"Tempo de execução: {end_time - start_time:.4f} segundos")
-            print(f"Nós expandidos: {expanded_nodes}\n")
+            print(f"Número de estados visitados: {expanded_nodes}\n")
             for i, state in enumerate(path):
                 print(f"Passo {i}:")
                 print_board(state)
